@@ -26,12 +26,13 @@ jobs:
       - name: Get code
         uses: actions/checkout@v3
       - name: Cache dependencies
-        id: cache
+        id: cache-dependencies
         uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: npm ci
       - name: Test code
         id: run-tests
@@ -49,12 +50,13 @@ jobs:
       - name: Get code
         uses: actions/checkout@v3
       - name: Cache dependencies
-        id: cache
+        id: cache-dependencies
         uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: npm ci
       - name: Build website
         id: build-website
